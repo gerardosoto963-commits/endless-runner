@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Runner - Deep Network OS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <button id="fullscreen-btn" onclick="toggleFullscreen()">[ ENLACE TOTAL: FULLSCREEN ]</button>
+
+        <div id="crt-overlay"></div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="audio-indicator">AUDIO NODE: ACTIVE</div>
+
+        <div id="difficulty-screen">
+            <div class="hud-bracket top-left"></div>
+            <div class="hud-bracket top-right"></div>
+            <div class="hud-bracket bottom-left"></div>
+            <div class="hud-bracket bottom-right"></div>
+            <div class="hud-header">
+                <h2>SELECCIÓN DE PROTOCOLO</h2>
+                <div class="sub-status">LOG IN: USER_RAFA // ELIGE LA INTENSIDAD DE LA RED</div>
+            </div>
+            <div class="difficulty-menu">
+                <button onclick="setDifficulty('easy')">[01] PROTOCOLO: FÁCIL (ENTRENAMIENTO)</button>
+                <button onclick="setDifficulty('normal')">[02] PROTOCOLO: NORMAL (BALANCEADO)</button>
+                <button onclick="setDifficulty('hard')">[03] PROTOCOLO: DIFÍCIL (HARDCORE + LÁSER)</button>
+            </div>
+        </div>
+
+        <div id="shop-screen" class="hidden">
+            <div class="hud-bracket top-left"></div>
+            <div class="hud-bracket top-right"></div>
+            <div class="hud-bracket bottom-left"></div>
+            <div class="hud-bracket bottom-right"></div>
+            
+            <div class="hud-header">
+                <h2>SISTEMA SOBRECARGADO</h2>
+                <div class="sub-status">LOG IN: USER_RAFA // REDIRECCIONANDO NÚCLEO</div>
+            </div>
+            
+            <div class="stats-bar">
+                <span>CRÉDITOS DISPONIBLES:</span>
+                <span id=\"total-coins\" class="neon-text-blue">0</span> 💰
+            </div>
+
+            <div class="shop-section mission-panel">
+                <h3>[00] CONTRATOS DE LA RED DE RECOMPENSAS</h3>
+                <div id="mission-text" class="neon-text-green">CARGANDO CONTRATO...</div>
+            </div>
+            
+            <div class="shop-section">
+                <h3>[01] OPTIMIZACIÓN DE HARDWARE</h3>
+                <div class="upgrade-row">
+                    <button id="buy-jump">MEJORAR IMPULSORES</button>
+                    <div class="level-display">LVL: <span id="jump-lvl">1</span></div>
+                </div>
+            </div>
+
+            <div class="shop-section">
+                <h3>[02] ENLACE DE AVATARES Y PASIVAS</h3>
+                <div class="char-grid">
+                    <button id="equip-human" class="char-btn equipped" disabled>HUMANO<br><small>COMBO X2</small></button>
+                    <button id="buy-slime" class="char-btn">CAZADOR<br><small>GRAV-MÓD</small></button>
+                    <button id="buy-skeleton" class="char-btn">ANDROIDE<br><small>AUTO-ESCUDO</small></button>
+                </div>
+            </div>
+
+            <button id="restart-btn" style="width: 100%; margin-top: 15px; font-size: 12px; border-color: #ff0055; color: #ff0055;">
+                REINICIAR ENLACE CON LA RED
+            </button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
