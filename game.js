@@ -810,12 +810,16 @@ const CINEMATIC = {
     start() {
         this.phase = 'intro'; this.frame = 0; this.typeIndex = 0; this.lastType = 0;
         if (difficultyScreen) difficultyScreen.classList.add('hidden');
+        const skipBtn = document.getElementById('cinematic-skip-btn');
+        if (skipBtn) skipBtn.classList.remove('hidden');
     },
 
     skip() {
         tutorialSeen = true; saveGameToBrowser();
         this.phase = 'done';
         if (difficultyScreen) difficultyScreen.classList.remove('hidden');
+        const skipBtn = document.getElementById('cinematic-skip-btn');
+        if (skipBtn) skipBtn.classList.add('hidden');
     },
 
     nextSlide() {
@@ -3491,34 +3495,58 @@ window.addEventListener('keyup', (e) => {
 });
 
 // --- ENTRADAS DE CONTROL: TÁCTIL ---
-// Toque en canvas: mitad derecha = saltar, mitad izquierda = agacharse
+
+// ── Canvas touchstart — maneja TANTO cinemática COMO gameplay ──
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    // Durante cinemática, el tap avanza la slide (manejado por el click listener del canvas)
-    if (CINEMATIC.phase !== 'idle' && CINEMATIC.phase !== 'done') return;
-    if (!player || !gameActive) return;
+
+    // Durante cinemática: tap avanza slide (igual que click)
+    if (CINEMATIC.phase === 'intro') {
+        CINEMATIC.phase = 'tutorial';
+        CINEMATIC.slide = 0;
+        CINEMATIC.frame = 0;
+        CINEMATIC.demoObjs = [];
+        return;
+    }
+    if (CINEMATIC.phase === 'tutorial') {
+        CINEMATIC.nextSlide();
+        return;
+    }
+
+    // Durante partida: mitad derecha = saltar, mitad izquierda = agacharse
+    if (!player || !gameActive || gamePaused) return;
     const touch = e.changedTouches[0];
-    const rect = canvas.getBoundingClientRect();
-    const relX = touch.clientX - rect.left;
+    const rect  = canvas.getBoundingClientRect();
+    const relX  = touch.clientX - rect.left;
     if (relX > rect.width / 2) { player.jump(); }
     else { player.crouch(true); }
 }, { passive: false });
 
 canvas.addEventListener('touchend', (e) => {
     e.preventDefault();
+    if (CINEMATIC.phase !== 'idle' && CINEMATIC.phase !== 'done') return;
     if (player) player.crouch(false);
 }, { passive: false });
 
-// Botones táctiles dedicados (visibles solo en móvil vía CSS)
-const touchJumpBtn = document.getElementById('touch-jump');
+// ── Botones táctiles dedicados ──────────────────────────────
+const touchJumpBtn   = document.getElementById('touch-jump');
 const touchCrouchBtn = document.getElementById('touch-crouch');
 
 if (touchJumpBtn) {
-    touchJumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); if (player && gameActive) player.jump(); }, { passive: false });
+    touchJumpBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (player && gameActive && !gamePaused) player.jump();
+    }, { passive: false });
 }
 if (touchCrouchBtn) {
-    touchCrouchBtn.addEventListener('touchstart', (e) => { e.preventDefault(); if (player && gameActive) player.crouch(true); }, { passive: false });
-    touchCrouchBtn.addEventListener('touchend', (e) => { e.preventDefault(); if (player) player.crouch(false); }, { passive: false });
+    touchCrouchBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (player && gameActive && !gamePaused) player.crouch(true);
+    }, { passive: false });
+    touchCrouchBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        if (player) player.crouch(false);
+    }, { passive: false });
 }
 
 // --- SISTEMA DE TABS EN EL SHOP ---

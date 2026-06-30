@@ -45,6 +45,9 @@
         <!-- Botón de pausa en canvas -->
         <button id="pause-btn" onclick="togglePause()">⏸</button>
 
+        <!-- Botón SKIP de cinemática — siempre HTML real, nunca depende de eventos del canvas -->
+        <button id="cinematic-skip-btn" class="hidden" onclick="CINEMATIC.skip()">SALTAR ▶▶</button>
+
         <!-- Controles táctiles -->
         <div id="touch-controls">
             <button class="touch-btn" id="touch-crouch" aria-label="Agacharse">▼</button>
